@@ -47,5 +47,3 @@ just by doing small thing you save so many extra rerenders.
 
 3.useCallback:- in order to prevent parent component from creating a new reference of a function.useCallback reduces the cost of rerendering.
 
-
-4.
