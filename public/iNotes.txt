@@ -1,49 +1,54 @@
-1.
-import React, { useState, memo, useCallback } from "react";
+//1.what does state variable two things?
+Ans:- state variable rerenders and also have the history,when state variable changes -like having previous value.
+Note:- everytime during rerender it doesnt change it(state variable value would remain same).
 
-export default function App() {
-  const [input, setInput] = useState("");
-  const [count, setCount] = useState(0);
+//2.when using strict mode in app.js what it does?
+Ans:- when using strict mode it render twice.
 
-  const incrementCount = useCallback(() => setCount(count + 1), [count]);
-  return (
-    <div>
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button onClick={incrementCount}>Increment counter</button>
-      <h3>Input text: {input}</h3>
-      <h3>Count: {count}</h3>
-      <hr />
-      <ChildComponent count={count} onclick={incrementCount} />
-    </div>
-  );
-}
+//3.diffrence between useRef and useState?
+Ans:-useRef doesnt rerender, while useState rerenders.
+useRef do the same thing as useState,that it will retain the variable's value even on the rerender.
+you would use useRef to keep the reference of the function and it would not cause the rerender.
 
-// var props = {count: value, onclick: function}
+useRef do:-1.retain the value of a variable even on cause a rerender 2. in order to point to particular HTML Element like :-(          <input id="btn" ref={valueRef} type="text" />).
 
-const ChildComponent = memo(function ChildComponent({ count, onclick }) {
-  console.log("child component is rendering");
-  return (
-    <div>
-      <h2>This is a child component.</h2>
-      <button onClick={onclick}>Increment</button>
-      <h4>Count: {count}</h4>
-    </div>
-  );
-});
+useState do:-rerender and retain the value on rerender. used to create a state variable
 
 
-:-
+Ex:-Case1 :-  if we have a button and a method and on button click and using useRef:-
+-it will not cause and rerender it will only print "click ref" under button click method only.
 
-by using child component inside the memo(), the child component will not be rerendered on change of textbox value (not button click),
-because button click changes the count value and count value is using in child component.its dependent on parent state.
-on the change pf input the child component should not rerender.
-just by doing small thing you save so many extra rerenders.
 
-2. whenever you compare something ,you compare reference (not the internal values of that object).
+const App = () => {
+  const valueRef = useRef(0);
+  const [count, setCount] = useState(10);
+  console.log("render ref", valueRef.current);
+  const onSubmit = () => {  //button click
+    // setCount(count + 1);
+    valueRef.current = valueRef.current + 1;
+    console.log("click ref", valueRef.current);
+    console.log("state", count);
+  };
+Ex:-Case2 :- 
+const App = () => {
+  const valueRef = useRef(0);
+  const [count, setCount] = useState(10);
+  console.log("render ref", valueRef.current);
+  const onSubmit = () => {  //button click
+    setCount(count + 1);
+    valueRef.current = valueRef.current + 1;
+    console.log("click ref", valueRef.current);
+    console.log("state", count);
+  };
 
-3.useCallback:- in order to prevent parent component from creating a new reference of a function.useCallback reduces the cost of rerendering.
-__________________________________
+-But if we uncomment setCount(count + 1); then it will print both "render ref" and "click ref" because useState causes rerender and here changing a state variable's count value using (setCount(count + 1))
+
+when you use useState and state variable are getting change by (setCount(count + 1);) then it would cause rerender,
+but if we use useRef and it would not cause rerender.
+
+
+//4.useCallback Hook?
+Ans:- it will preventing a child to rerendering,it was preventing a reference change. internaly useCallback use the useRef in order to retain the variable's reference/ function's reference so that it doesnt cause the rerender.
+useCallback do:- to keep the reference of the variable. 
+
+//

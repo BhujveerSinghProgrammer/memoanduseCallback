@@ -1,66 +1,49 @@
 
+import { useRef, useState } from "react";
 
-import React, { useState, memo, useCallback } from "react";
-
-export default function App() {
-  const [input, setInput] = useState("");
+const App = () => {
+  const inputRef = useRef(0);
+  const valueRef = useRef(0);
   const [count, setCount] = useState(0);
 
-  const incrementCount = useCallback(() => setCount(count + 1), [count]);
-  //using useCallback:- rerender the child component based on count value changes
+  console.log("render ref", valueRef.current);
+  const onSubmit = () => {
+    // let a = document.getElementById("btn");
+    inputRef.current.focus();
+    // console.log(inputRef.current.value);
+    // console.log("react", inputRef.current.value);
+    // console.log("js", a.value);
+
+    setCount(count + 1);
+    valueRef.current = valueRef.current + 1;
+    console.log("click ref", valueRef.current);
+    console.log("state", count);
+  };
+
   return (
-    <div>
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button onClick={incrementCount}>Increment counter</button>
-      <h3>Input text: {input}</h3>
-      <h3>Count: {count}</h3>
-      <hr />
-      <ChildComponent count={count} onclick={incrementCount} />
+    <div className="modal--overlay">
+      <div className="modal">
+        <h1>Insert a new value</h1>
+        <div>
+          <span> {valueRef.current}</span>
+          <input id="btn" ref={inputRef} type="text" />
+          <button onClick={onSubmit}>Save new value</button>
+        </div>
+      </div>
     </div>
   );
-}
+};
+export default App;
 
-// var props = {count: value, onclick: function}
+// useRef hook is a beautiful hook
+// useRef it provides you with two advantages
 
-const ChildComponent = memo(function ChildComponent({ count, onclick }) {
-  console.log("child component is rendering");
-  return (
-    <div>
-      <h2>This is a child component.</h2>
-      <button onClick={onclick}>Increment</button>
-      <h4>Count: {count}</h4>
-    </div>
-  );
-});
+// 1st it lets you get an element in react using referrence
+// 2nd it will act as a data retention method on reloads
 
-// function  has a referrence
+// useRef hook take a default value in the function as a parameter
+// useRef(default value)
 
-// a =>  1
-// rerender
-// a => 2
-
-// prev a === cur a // not equal
-// cause a rerender when a is passed as a function to the child
-// use Case is that you want a to retain this referrence 1
-// even when there is a rerender
-// useCallback(a, []);
-
-// rerender
-// a = 1
-// prev a === cur a // equal
-
-// child would not be rerendered
-
-// incrementCount = 1203
-// incrementCount = 2010
-
-//useCallbacks
-// incrementCount = 1203
-// incrementCount ref is going to change only if the value of count changes
-// useCallback is going to retain the referrence of the function
-// on rerenders and it would change the referrence of the function on
-// change of the dependency array
+// the variable that is created using useRef
+// is an object and you can access the value set using useRef
+// using a key named current
