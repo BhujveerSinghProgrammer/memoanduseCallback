@@ -51,4 +51,4 @@ but if we use useRef and it would not cause rerender.
 Ans:- it will preventing a child to rerendering,it was preventing a reference change. internaly useCallback use the useRef in order to retain the variable's reference/ function's reference so that it doesnt cause the rerender.
 useCallback do:- to keep the reference of the variable. 
 
-//
+//Done
